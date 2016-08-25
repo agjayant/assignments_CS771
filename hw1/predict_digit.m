@@ -1,8 +1,10 @@
-function accuracy = mnist_classifier(dataX,X_test,Y_test)
+function accuracy = predict_digit(T,dataX,X_test, Y_test)
+
 mean_all= zeros([10 784]);
 for i = 1:10
 	[N,D] = size(dataX{i});
-	for j = 1:N
+    sample_list = randperm(N);
+	for j = sample_list(1:T)
 		mean_all(i,:) = mean_all(i,:) + dataX{i}(j,:); 
 	end
 	mean_all(i,:) = mean_all(i,:)/N;
@@ -32,4 +34,7 @@ for i= 1:N
 end
 
 accuracy = correct_pred/N;
+
 end
+
+
