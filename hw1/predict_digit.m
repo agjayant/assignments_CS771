@@ -7,7 +7,7 @@ for i = 1:10
 	for j = sample_list(1:T)
 		mean_all(i,:) = mean_all(i,:) + dataX{i}(j,:); 
 	end
-	mean_all(i,:) = mean_all(i,:)/N;
+	mean_all(i,:) = mean_all(i,:)/T;
 end
 
 [N,D] = size(X_test);
