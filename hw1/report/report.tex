@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{dsfont}
 
 \geometry{
 a4paper,
@@ -23,9 +24,65 @@ bottom=10mm,
 \end{center}
 
 \section{Problem 1 : Distance From Means}
+We know that $f(x)$ was defined as:
+$$f(x) := ||\mu_- - x||^2  - ||\mu_+ - x||^2 $$
+Consider the following:
+\begin{equation*}
+\begin{aligned}
+f(x) &= ||\mu_- - x||^2  - ||\mu_+ - x||^2 \\
+& = 2\langle\mu_+ - \mu_- , x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+& = 2\langle \frac{\sum_{y_n = 1}x_n}{N} - \frac{\sum_{y_n = -1}x_n}{N} , x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+& = \frac{2}{N} \langle \sum_{y_n = 1}x_n - \sum_{y_n = -1}x_n , x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+& = \frac{2}{N} \langle \sum_{n = 1}^Nx_ny_n, x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+& = \frac{2}{N} \sum_{n = 1}^Ny_n \langle x_n, x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+& = \sum_{n = 1}^N\frac{2}{N} y_n \langle x_n, x \rangle + ||\mu_-||^2 - ||\mu_+||^2 \\
+\end{aligned}
+\end{equation*}
+
+Now, use $\alpha_n$ and $b$ as follows from the above expression:
+$$\alpha_n = \frac{2}{N}y_n$$
+$$b = ||\mu_-||^2 - ||\mu_+||^2$$
+
+We can therefore write the above expression as:
+$$f(x) = \sum_{n=1}^N \alpha_n \langle x_n,x \rangle + b$$
 \section{Problem 2 : Classes as Gaussians}
 \section{Problem 3 : Importance-Weighted Linear Regression}
 \section{Problem 4 : Noise as Regularizer}
+The standard sum-of-squares loss function for linear regression model $y=w^\top x$ is as follows:
+$$L(w) = \sum_{n=1}^N \{y_n - w^\top x_n\}^2$$
+After adding Gaussian noise $\epsilon_n$ with zero mean and variance $\sigma^2$ to each input $x_n \in \mathds{R}^D$, the new loss function, $\tilde{L}(w)$, is as follows:
+$$\tilde{L}(w) = \sum_{n=1}^N\{y_n-w^\top(x_n+\epsilon_n)\}^2$$
+Consider $\mathds{E}[\tilde{L}(w)]$:
+
+\begin{equation*}
+\begin{aligned}
+\mathds{E}[\tilde{L}(w)] &= \mathds{E}[\sum_{n=1}^N\{y_n-w^\top(x_n+\epsilon_n)\}^2] \\
+&= \sum_{n=1}^N\mathds{E}[\{y_n-w^\top(x_n+\epsilon_n)\}^2] \\
+&= \sum_{n=1}^N\mathds{E}[\{(y_n- w^\top x_n )-w^\top \epsilon_n\}^2] \\
+&= \sum_{n=1}^N \{ (y_n- w^\top x_n )^2 +  \mathds{E}[2(y_n- w^\top x_n )w^\top \epsilon_n]+ \mathds{E}[(w^\top \epsilon_n)^2]\}
+\end{aligned}
+\end{equation*}
+
+Now, since $\mathds{E}[\epsilon_n] = 0$, therefore:
+$$\mathds{E}[2(y_n- w^\top x_n )w^\top \epsilon_n] = 0$$
+
+The expression for $\mathds{E}[\tilde{L}(w)]$, thus reduces to:
+$$\mathds{E}[\tilde{L}(w)] = \sum_{n=1}^N \{ (y_n- w^\top x_n )^2 +  \mathds{E}[(w^\top \epsilon_n)^2]\}$$
+
+Since $\mathds{E}[\epsilon_n^2] = \sigma^2$\textbf{I}, therefore:
+$$\mathds{E}[(w^\top \epsilon_n)^2]\} = ||w||^2\sigma^2$$
+
+The above expression thus becomes:
+\begin{equation*}
+\begin{aligned}
+\mathds{E}[\tilde{L}(w)] &= \sum_{n=1}^N (y_n- w^\top x_n )^2 + ||w||^2N\sigma^2\\
+&= L(w) + \lambda||w||^2
+\end{aligned}
+\end{equation*}
+
+where $\lambda = N\sigma^2$. This is thus, equivalent to minimizing the original sum-of-squared-errors error $L(w)$ for noise-free
+inputs, plus an $l_2$ regularizer on $w$.
+
 \section{Problem 5 : Decision Trees for Regression}
 \section{Problem 6 : Multi-Class Classifier}
 
