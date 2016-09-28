@@ -31,6 +31,19 @@ elseif strcmp(init, 'furthest'),
   % iteratively choose furthest points as the remaining centers
 
   %TODO
+  mu(1,:) = X(randperm(N,1),:);
+  for i=2:K
+      max = norm(mu(1,:) - X(1,:));
+      mu(i,:) = X(1,:) 
+      for j=1:length(mu)
+          for k=1:N
+              if max < norm(mu(j,:) - X(k,:));
+                  max = norm(mu(j,:) - X(k,:));
+                  mu(i,:) = X(k,:);
+              end
+          end
+      end
+  end
   
   % again, don't bother initializing z
   z = zeros(N,1);
@@ -49,8 +62,16 @@ for iter=1:20,
   
   for n=1:N,
     % assign point n to the closest center
-
     %TODO
+    z(n) = 1;
+    min = norm(mu(1) - X(n,:));
+    for i=2:length(mu)
+        dist = norm(mu(i) - X(n,:));
+        if min > dist
+            min = dist;
+            z(n) = i;
+        end
+    end
   end;
   
   % check to see if we've converged
@@ -60,8 +81,14 @@ for iter=1:20,
   
   
   % re-estimate the means
-
   %TODO
+  mu = zeros(K,D);
+  for i=1:N
+      mu(z(i),:) = mu(z(i),:) + X(i,:);
+  end
+  mu = mu/K;
+  
+  
 end;
 
 % final: compute the score
