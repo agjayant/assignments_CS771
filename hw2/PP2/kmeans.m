@@ -33,16 +33,26 @@ elseif strcmp(init, 'furthest'),
   %TODO
   mu(1,:) = X(randperm(N,1),:);
   for i=2:K
-      max = norm(mu(1,:) - X(1,:));
-      mu(i,:) = X(1,:) 
-      for j=1:length(mu)
-          for k=1:N
-              if max < norm(mu(j,:) - X(k,:));
+      min = 1000000 ;
+      point = 1;
+      %fprintf(['check1\n']);      
+      for j=1:size(mu,1)
+       %   length(mu)
+        %  fprintf(['check2\n']);
+          max = norm( mu(j,:) - X(1,:) ); 
+          maxPoint = 1; 
+          for k=2:N
+              if max < norm(mu(j,:) - X(k,:))
                   max = norm(mu(j,:) - X(k,:));
-                  mu(i,:) = X(k,:);
+                  maxPoint = k;
               end
           end
+          if min > norm(mu(j,:) - X(maxPoint , :))
+              min  = norm(mu(j,:) - X(maxPoint , :));
+              point  = maxPoint;
+          end
       end
+      mu(i,:) = X(point,:);
   end
   
   % again, don't bother initializing z
@@ -64,9 +74,9 @@ for iter=1:20,
     % assign point n to the closest center
     %TODO
     z(n) = 1;
-    min = norm(mu(1) - X(n,:));
-    for i=2:length(mu)
-        dist = norm(mu(i) - X(n,:));
+    min = norm(mu(1,:) - X(n,:));
+    for i=2:size(mu,1)
+        dist = norm(mu(i,:) - X(n,:));
         if min > dist
             min = dist;
             z(n) = i;
