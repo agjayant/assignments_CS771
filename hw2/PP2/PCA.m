@@ -12,18 +12,29 @@ if K > D,
 end;
 
 % first, we have to center the data
-
 %TODO
+mean = zeros(1,D);
+for i=1:N
+    mean = mean + X(i,:);
+end
+mean = mean/N;
+
+for i=1:N
+    X(i,:)= X(i,:)-mean;
+end
 
 % next, compute the covariance matrix C of the data
-
 %TODO
+
+C = (transpose(X)*X)/N;
 
 % compute the top K eigenvalues and eigenvectors of C... 
 % hint: you may use 'eigs' built-in function of MATLAB
 
 %TODO
-
+[U V] = eig(C, 'vector');
+U = U(:,1:K);
+evals = V(1:K);
 
 % project the data
 
