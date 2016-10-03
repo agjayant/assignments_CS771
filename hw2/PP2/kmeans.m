@@ -67,7 +67,7 @@ for iter=1:20,
   % in the first step, we do assignments: each point is assigned to the
   % closest center.  we'll judge convergence based on these assignments,
   % so we want to keep track of the previous assignment
-  
+
   oldz = z;
   
   for n=1:N,
@@ -96,9 +96,8 @@ for iter=1:20,
   for i=1:N
       mu(z(i),:) = mu(z(i),:) + X(i,:);
   end
-  mu = mu/K;
-  
-  
+  mu = mu/N;
+   
 end;
 
 % final: compute the score
