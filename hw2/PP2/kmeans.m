@@ -33,26 +33,20 @@ elseif strcmp(init, 'furthest'),
   %TODO
   mu(1,:) = X(randperm(N,1),:);
   for i=2:K
-      min = 1000000 ;
-      point = 1;
-      %fprintf(['check1\n']);      
-      for j=1:size(mu,1)
-       %   length(mu)
-        %  fprintf(['check2\n']);
-          max = norm( mu(j,:) - X(1,:) ); 
-          maxPoint = 1; 
-          for k=2:N
-              if max < norm(mu(j,:) - X(k,:))
-                  max = norm(mu(j,:) - X(k,:));
-                  maxPoint = k;
-              end
+      maxDist = norm(X(1,:)-mu(1,:));
+      maxPoint = 1;  
+      for n=1:N
+          minDist = norm(mu(1,:)-X(n,:));
+          for j=1:size(mu,1)
+              dist = norm(mu(j,:)-X(n,:));
+              minDist = min(minDist,dist);
           end
-          if min > norm(mu(j,:) - X(maxPoint , :))
-              min  = norm(mu(j,:) - X(maxPoint , :));
-              point  = maxPoint;
+          if minDist > maxDist
+              maxDist = minDist;
+              maxPoint = n;
           end
-      end
-      mu(i,:) = X(point,:);
+      end      
+      mu(i,:) = X(maxPoint,:);
   end
   
   % again, don't bother initializing z
@@ -74,11 +68,11 @@ for iter=1:20,
     % assign point n to the closest center
     %TODO
     z(n) = 1;
-    min = norm(mu(1,:) - X(n,:));
-    for i=2:size(mu,1)
+    minDist = norm(mu(1,:) - X(n,:));
+    for i=2:K
         dist = norm(mu(i,:) - X(n,:));
-        if min > dist
-            min = dist;
+        if minDist > dist
+            minDist = dist;
             z(n) = i;
         end
     end
@@ -92,11 +86,16 @@ for iter=1:20,
   
   % re-estimate the means
   %TODO
+  numPoints = zeros(1,K);
   mu = zeros(K,D);
   for i=1:N
       mu(z(i),:) = mu(z(i),:) + X(i,:);
+      numPoints(z(i)) = numPoints(z(i)) + 1;
   end
-  mu = mu/N;
+  
+  for i=1:K
+      mu(i,:)  = mu(i,:)/numPoints(i);
+  end
    
 end;
 
