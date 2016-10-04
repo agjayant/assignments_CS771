@@ -33,9 +33,10 @@ C = (transpose(X)*X)/N;
 
 %TODO
 [U V] = eig(C, 'vector');
-U = U(:,1:K);
+[V ind]  = sort(V,'descend');   
+U = U(:,ind(1:K));
 evals = V(1:K);
 
-% project the data
+% project the dataeval
 
 Z = X*U;
