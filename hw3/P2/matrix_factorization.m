@@ -20,11 +20,35 @@ num_iters = 100; % number of iteratation of the alternating optimization procedu
 for iter=1:num_iters
     % TODO: update U, one row at a time
     for n=1:N
-        U(n,:) = ???
+        
+        first = 0;
+        for j=find(train_mask(n,:))
+            first = first + transpose(V(j,:))*V(j,:);
+        end 
+        first = first + lambda*eye(K);
+        
+        second = zeros(1,K);
+        for j=find(train_mask(n,:))
+            second = second + X(n,j)*V(j,:);
+        end
+        
+        U(n,:) = inv(first)*transpose(second);
     end
+    
     % TODO: update V, one row at a time
     for m=1:M
-        V(m,:) = ???
+        first = 0;
+        for j=find(train_mask(:,m))
+            first = first + transpose(U(j,:))*U(j,:);
+        end 
+        first = first + lambda*eye(K);
+        
+        second = zeros(1,K);
+        for j=find(train_mask(:,m))
+            second = second + X(j,m)*U(j,:);
+        end
+        
+        V(m,:) = inv(first)*transpose(second);
     end
 
     % Mean absolute error (MAE) on training and test entries of X
