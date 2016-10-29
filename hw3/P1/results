@@ -1,0 +1,6 @@
+Polynomial kernel degree = 1, update number 2844, test accuracy = 0.958439
+Polynomial kernel degree = 2, update number 739, test accuracy = 0.985751
+Polynomial kernel degree = 4, update number 419, test accuracy = 0.988804
+Polynomial kernel degree = 8, update number 489, test accuracy = 0.984563
+Polynomial kernel degree = 10, update number 531, test accuracy = 0.977099
+Polynomial kernel degree = 20, update number 943, test accuracy = 0.961832
