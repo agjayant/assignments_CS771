@@ -19,18 +19,15 @@ num_iters = 100; % number of iteratation of the alternating optimization procedu
 
 for iter=1:num_iters
     % TODO: update U, one row at a time
-    for n=1:N
-        
+    for n=1:N        
         first = 0;
-        for j=find(train_mask(n,:))
-            first = first + transpose(V(j,:))*V(j,:);
-        end 
-        first = first + lambda*eye(K);
-        
         second = zeros(1,K);
-        for j=find(train_mask(n,:))
-            second = second + X(n,j)*V(j,:);
-        end
+        mask = find(train_mask(n,:));
+        for j=1:size(mask,2)
+            first = first + transpose(V(mask(j),:))*V(mask(j),:);
+            second = second + X(n,mask(j))*V(mask(j),:);
+        end 
+        first = first + lambda*eye(K);  
         
         U(n,:) = inv(first)*transpose(second);
     end
@@ -38,15 +35,13 @@ for iter=1:num_iters
     % TODO: update V, one row at a time
     for m=1:M
         first = 0;
-        for j=find(train_mask(:,m))
-            first = first + transpose(U(j,:))*U(j,:);
-        end 
-        first = first + lambda*eye(K);
-        
         second = zeros(1,K);
-        for j=find(train_mask(:,m))
-            second = second + X(j,m)*U(j,:);
-        end
+        mask=find(train_mask(:,m));
+        for j=1:size(mask,1)
+            first = first + transpose(U(mask(j),:))*U(mask(j),:);
+            second = second + X(mask(j),m)*U(mask(j),:);
+        end 
+        first = first + lambda*eye(K);        
         
         V(m,:) = inv(first)*transpose(second);
     end
