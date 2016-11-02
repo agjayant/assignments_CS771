@@ -38,7 +38,7 @@ for iter=1:numIter,
     for k=1:K,
       % TBD: compute z(n,k) = log probability that the nth data point belongs
       % to cluster k
-      z(n,k) = -0.5*( ((X(n,:)-mu(k,:))*(X(n,:)-mu(k,:))')/si2 + D*log(2*pi) + log(si2));
+      z(n,k) = log(pk(k)) -(0.5/si2)*(X(n,:)-mu(k,:))*(X(n,:)-mu(k,:))' - 0.5*D*log(2*pi) - 0.5*D*log(si2);
     end;
     
     % turn log probabilities into actual probabilities (we are working with logs for numeric stability)
@@ -46,32 +46,27 @@ for iter=1:numIter,
     z(n,:) = exp(z(n,:) - maxZ - log(sum(exp(z(n,:) - maxZ))));
   end;
   
-  gam  = z ;
-  
   % TBD: re-estimate pk
-  pk = sum(gam)/N ;
+  pk = sum(z)/N ;
   
   % TBD: re-estimate the means
-  %mu =
+  
   for k=1:K
       mu(k,:) = zeros(1,D); 
       for n=1:N
-          mu(k,:) = mu(k,:) + gam(n,k)*X(n,:);
+          mu(k,:) = mu(k,:) + z(n,k)*X(n,:);
       end
-      mu(k,:) = mu(k,:)/sum(gam(:,k));
+      mu(k,:) = mu(k,:)/sum(z(:,k));
   end
   
   % TBD: re-estimate the variance
-  first = 0;
+  si2 = 0 ;
   for n=1:N
-      first = first + X(n,:)*X(n,:)';
+      for k=1:K
+          si2 = si2 + z(n,k)*(X(n,:)-mu(k,:))*(X(n,:)-mu(k,:))';
+      end
   end
-  second = 0;
-  for k=1:K
-      second = second + sum(gam(:,k))*mu(k,:)*mu(k,:)';
-  end
-  si2 = (first-second)/N ;
-  
+  si2 = si2/(N*D);
 % compute *complete* and *incomplete* log likelihoods
 cll = 0;
 ill = 0;
@@ -89,4 +84,4 @@ end
 end;
 
 % TBD: compute the BIC
-BIC = -2*ill + k*log(N);
+BIC = -2*ILL(numIter) + (K*D + K + 1)*log(N);

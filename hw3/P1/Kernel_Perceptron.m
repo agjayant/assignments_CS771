@@ -42,20 +42,21 @@ for num_run=1:6
                 % TODO: predict labels of test data
                 y_test_pred = zeros(N_test,1);
                 for j=1:N_test
-                    y_test_pred(j) = sign(sum(alpha.*Y_train.*K_trte(:,j)));
+                    y_test_pred(j) = sign(sum(alpha_avg.*Y_train.*K_trte(:,j)));
                 end
                 % compute accuracy
                 acc{num_run}(num_mist(num_run)) = mean(Y_test==y_test_pred);        
-                fprintf('Polynomial kernel degree = %d, update number %d, test accuracy = %f\n',d(num_run), num_mist(num_run),acc{num_run}(num_mist(num_run)));
+                       
+            end
+        end
+    end
+    fprintf('Polynomial kernel degree = %d, update number %d, test accuracy = %f\n',d(num_run), num_mist(num_run),acc{num_run}(num_mist(num_run)));
                 % Note: if you want, you may take the plotting part out of the "pass" loop to
                 % make the code run faster
                 plot(1:num_mist(num_run),acc{num_run}(1:num_mist(num_run)),colors(num_run)); 
                 xlabel('number of mistakes')
                 ylabel('accuracy')
-                drawnow;        
-            end
-        end
-    end
+                drawnow; 
     hold on;
 end
         
