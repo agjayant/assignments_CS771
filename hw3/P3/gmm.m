@@ -46,7 +46,7 @@ for iter=1:numIter,
     z(n,:) = exp(z(n,:) - maxZ - log(sum(exp(z(n,:) - maxZ))));
   end;
   
-  gam  = zeros(N,K);
+  gam  = z ;
   
   % TBD: re-estimate pk
   pk = sum(gam)/N ;
@@ -89,4 +89,4 @@ end
 end;
 
 % TBD: compute the BIC
-BIC = ???
+BIC = -2*ill + k*log(N);
