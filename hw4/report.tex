@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{wrapfig}
+\usepackage{tipa}
+\geometry{
+a4paper,
+right=10mm,
+left=10mm,
+top=10mm,
+bottom=10mm,	
+}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\begin{center}
+\textbf{\Large HOMEWORK 4 : CS771} \\
+\textit{\large Jayant Agrawal}         14282
+\end{center}
+\section{Problem 1 - VC Dimension for Finite-Size Hypothesis Class}
+
+\section{Problem 2 - Bagging Reduces Bias}
+Consider $E_{bag}$:
+
+\begin{equation*}
+\begin{aligned}
+E_{bag} &= E\Big[\big( \frac{1}{T}\sum_{t=1}^Tf_t(x)-f(x)\big)^2 \Big]\\
+&= E\Big[\frac{1}{T^2}\big(\sum_{t=1}^Tf_t(x)\big)^2\Big] + E\Big[f(x)^2\Big] -\frac{2}{T}E\Big[f(x)\sum_{t=1}^Tf_t(x)\Big]\\
+&= E\Big[\frac{1}{T^2}\big(\sum_{t=1}^Tf(x) + \epsilon_t(x)\big)^2\Big] + E\Big[f(x)^2\Big] -\frac{2}{T}E\Big[f(x)\sum_{t=1}^T\big(f(x) + \epsilon_t(x)\big)\Big]\\
+&= E\Big[\frac{1}{T^2}\big(Tf(x) + \sum_{t=1}^T\epsilon_t(x)\big)^2\Big] + E\Big[f(x)^2\Big] -\frac{2}{T}E\Big[Tf(x)^2 + f(x)\sum_{t=1}^T\epsilon_t(x)\Big]\\
+&= E\Big[f(x)^2\Big] + \frac{1}{T^2}E\Big[2Tf(x)\sum_{t=1}^T\epsilon_t(x)\Big] +\frac{1}{T^2}E\Big[\big(\sum_{t=1}^T\epsilon_t(x)\big)^2\Big] + E\Big[f(x)^2\Big] -2E\Big[f(x)^2\Big]-\frac{2}{T}E\Big[f(x)\sum_{t=1}^T\epsilon_t(x)\Big]\\
+&= \frac{1}{T^2}E\Big[\big(\sum_{t=1}^T\epsilon_t(x)\big)^2\Big] \\
+\end{aligned}
+\end{equation*}
+Now, $E_{bag}$ is equal to $\frac{1}{T}E_{ind}$ if:
+$$\frac{1}{T^2}E\Big[\big(\sum_{t=1}^T\epsilon_t(x)\big)^2\Big] = \frac{1}{T} \times \frac{1}{T}\sum_{t=1}^TE\Big[\big(\epsilon_t(x)\big)^2\Big]$$
+$$\sum_{i \neq j}E\Big[\epsilon_i(x)\epsilon_j(x)\Big] = 0$$
+Thus, if the above condidition is true, then $E_{bag} = \frac{1}{T}E_{ind}$.	
+\section{Problem 3 - Generative Model for Classification}
+
+\section{Problem 4 - Latent Factor Models vs Feedforward Neural Net}
+
+\section{Problem 5 - Transferring the Knowledge}
+If we had enought amount of training data $\{x_n,y_n\}_{n=1}^N$, to learn classifier $w$, we could have used the usual Euclidean Loss function to train the classifier:
+$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2$$
+where $w(x_m)$ is the predicted sentiment for $x_m$ by $w$. But since, the amount of training data is small, we would like to take help from a previously learned classifier. Intuitively, we would want the predictions of the DVD classifier $w$, to be close to the already learned classifier $w_0$ for Books. Consider the following loss function which captures this:
+$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w(x_m)-w_0(x_m)||^2 $$ 
+where $\mu$ is weight given to the predictions from the learned classifier. Finally, consider the following regularized version of the above loss function:
+$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w(x_m)-w_0(x_m)||^2 + \lambda R(w)$$ 
+where $\lambda R(w)$ can be any regularizer such as an l2 regularizer.
+
+
+\end{document}
+
+
