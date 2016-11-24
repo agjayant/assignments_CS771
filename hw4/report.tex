@@ -26,7 +26,10 @@ bottom=10mm,
 \textit{\large Jayant Agrawal}         14282
 \end{center}
 \section{Problem 1 - VC Dimension for Finite-Size Hypothesis Class}
-
+Since, there are N points we can partition them in atmost $2^N$ ways. Thus, if we have $2^N$ hypothesis, we can definitely shatter those points. Therefore, the minimum size of $\mathcal{H}$ such that it is guranteed to shatter N points with binary labels is $2^N$.
+$$\mathcal{H} \geq 2^N $$
+Also, using this, VC-dimension in this case can be atmost $log(|\mathcal{H}|)$, since the maximum number of points in this case that we can shatter is N.
+$$\text{VC-Dimension} \leq log(\mathcal{H})$$
 \section{Problem 2 - Bagging Reduces Bias}
 Consider $E_{bag}$:
 
@@ -45,17 +48,25 @@ $$\frac{1}{T^2}E\Big[\big(\sum_{t=1}^T\epsilon_t(x)\big)^2\Big] = \frac{1}{T} \t
 $$\sum_{i \neq j}E\Big[\epsilon_i(x)\epsilon_j(x)\Big] = 0$$
 Thus, if the above condidition is true, then $E_{bag} = \frac{1}{T}E_{ind}$.	
 \section{Problem 3 - Generative Model for Classification}
+This is very similar to a Gaussian Mixture Model which is seen as a clustering problem. 
 
 \section{Problem 4 - Latent Factor Models vs Feedforward Neural Net}
+The PPCA/FA model as defined in the problem is similar to a Feedforward Neural Net with a single hidden layer in the sense that now the feature embeddings $z$ act as the hidden layer. The label $y$ acts as the ouput layer. \\ \\
+This type of model has an advantage over Neural Net that training this model is very efficient and fast. A FeedForward Neural Net would require several iterations and time to learn the same function. Also, the number of parameters to learn in such a model will be very less as compared to a neural net.\\ \\
+But still, a feedforward neural will be preferred because of the following reasons:
+\begin{itemize}
+\item Given the data points $\{x_n\}_{n=1}^N$, we would have to come up with very good guesses for the underlying distributions( $p(x|z,\theta)$ , $p(y|z,v)$). But, a neural net would learn these functions by itself.
+\item A neural net can learn any function whereas in the case of PPCA/FA, we are the choice of functions is constrained by the fact that we should be able to carry out the steps of EM for those choices.
+\end{itemize}
 
 \section{Problem 5 - Transferring the Knowledge}
 If we had enought amount of training data $\{x_n,y_n\}_{n=1}^N$, to learn classifier $w$, we could have used the usual Euclidean Loss function to train the classifier:
 $$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2$$
 where $w(x_m)$ is the predicted sentiment for $x_m$ by $w$. But since, the amount of training data is small, we would like to take help from a previously learned classifier. Intuitively, we would want the predictions of the DVD classifier $w$, to be close to the already learned classifier $w_0$ for Books. Consider the following loss function which captures this:
-$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w(x_m)-w_0(x_m)||^2 $$ 
+$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w-w_0||^2 $$ 
 where $\mu$ is weight given to the predictions from the learned classifier. Finally, consider the following regularized version of the above loss function:
-$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w(x_m)-w_0(x_m)||^2 + \lambda R(w)$$ 
-where $\lambda R(w)$ can be any regularizer such as an l2 regularizer.
+$$\mathcal{L} = \sum_{m=1}^M ||w(x_m)-y_m||^2 + \mu||w-w_0||^2 + \lambda R(w)$$ 
+where $\lambda R(w)$ can be any regularizer such as an l2 regularizer ($\lambda||w^2||$).
 
 
 \end{document}
