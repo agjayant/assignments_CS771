@@ -48,7 +48,10 @@ $$\frac{1}{T^2}E\Big[\big(\sum_{t=1}^T\epsilon_t(x)\big)^2\Big] = \frac{1}{T} \t
 $$\sum_{i \neq j}E\Big[\epsilon_i(x)\epsilon_j(x)\Big] = 0$$
 Thus, if the above condidition is true, then $E_{bag} = \frac{1}{T}E_{ind}$.	
 \section{Problem 3 - Generative Model for Classification}
-This is very similar to a Gaussian Mixture Model which is seen as a clustering problem. 
+This is very similar to a Gaussian Mixture Model which is seen as a clustering problem. The quantities that we would need to estimate are $\theta = \{\pi_k,\mu_k,\Sigma_k\}_{k=1}^K$, where $\pi_k = p(y = k)$. The estimation can be done in a similar way as we did in the case of Gaussian Mixture Models using EM. In the E step, compute the posterior $p(y|x,\theta^{old})$ and the expected complete data log-likelihood wrt this posterior. In the M step, compute $\theta^{new}$ by doing MLE on the above. \\ \\
+At test time an example x can be assigned a class according to higher probability scores as:
+$$y = max_{y}p(y|x) = max_{y}p(y)p(x|y)$$
+Using a simpler covariance matrix (spherical/diagonal) will lead to simpler computations and less complex models. The model can be made more complex(and hence, more powerful) by using a full covariance matrix, but it comes with some disadvantages. There will more parameters to learn which also increases the chances of overfitting.
 
 \section{Problem 4 - Latent Factor Models vs Feedforward Neural Net}
 The PPCA/FA model as defined in the problem is similar to a Feedforward Neural Net with a single hidden layer in the sense that now the feature embeddings $z$ act as the hidden layer. The label $y$ acts as the ouput layer. \\ \\
